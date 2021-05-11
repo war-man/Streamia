@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Case>
+@{
+    ViewData["Title"] = "Manage Cases";
+}
+
+<div class="card">
+    <div class="content">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Message</th>
+                    <th>Reseller</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var record in Model)
+                {
+                    <tr>
+                        <td>@record.Title</td>
+                        <td>@record.Message</td>
+                        <td>@record.Reseller.Name</td>
+                        <td>
+                            <a class="btn btn-warning btn-fill" asp-action="Edit" asp-route-id="@record.Id" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                            <form asp-action="Delete"
+                                  asp-route-id="@record.Id"
+                                  style="display:inline"
+                                  onsubmit="return confirm('Are you sure you want to proceed?')">
+                                <button class="btn btn-danger btn-fill" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

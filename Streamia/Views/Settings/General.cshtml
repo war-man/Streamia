@@ -1,0 +1,47 @@
+﻿@model Setting
+@{
+    ViewData["Title"] = "Settings";
+    ViewData["DisableSearch"] = string.Empty;
+    ViewData["DisableNavigation"] = string.Empty;
+}
+
+<div class="card">
+    <div class="content">
+        <form method="post">
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <label asp-for="PointPrice"></label>
+                    <input asp-for="PointPrice" class="form-control" />
+                    <span class="text-danger" asp-validation-for="PointPrice"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="PointsPerCreatedUser"></label>
+                    <input asp-for="PointsPerCreatedUser" class="form-control" />
+                    <span class="text-danger" asp-validation-for="PointsPerCreatedUser"></span>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-12">
+                    <label asp-for="PayPalClientId"></label>
+                    <input asp-for="PayPalClientId" class="form-control" />
+                    <span class="text-danger" asp-validation-for="PayPalClientId"></span>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <button class="btn btn-success btn-fill">
+                <i class="fas fa-check"></i> Save
+            </button>
+
+        </form>
+    </div>
+</div>
+

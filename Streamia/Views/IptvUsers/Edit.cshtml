@@ -1,0 +1,61 @@
+﻿@model IptvUser
+@{
+    ViewData["Title"] = "Edit IPTV User";
+}
+
+<div class="card">
+    <div class="content">
+
+        <div class="text-danger" asp-validation-summary="All"></div>
+
+        <form method="post" asp-action="Add">
+
+            <input type="hidden" asp-for="Id"/>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="Username"></label>
+                    <input asp-for="Username" class="form-control" />
+                    <span asp-validation-for="Username" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Password"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label asp-for="Connections"></label>
+                    <input asp-for="Connections" class="form-control" />
+                    <span asp-validation-for="Connections" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="BouquetId"></label>
+                    <select asp-for="BouquetId" asp-items="@(new SelectList(ViewBag.Bouquets,"Id","Name"))" class="form-control"></select>
+                    <span asp-validation-for="BouquetId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <label asp-for="DaysToExpire"></label>
+                    <input asp-for="DaysToExpire" class="form-control" />
+                    <span asp-validation-for="DaysToExpire" class="text-danger"></span>
+                </div>
+                <div class="col-md-12">
+                    <label asp-for="Notes"></label>
+                    <textarea asp-for="Notes" class="form-control"></textarea>
+                </div>
+            </div>
+
+            <hr />
+
+            <button type="submit" class="btn btn-warning btn-fill">
+                <i class="fas fa-pencil-alt"></i> Edit
+            </button>
+        </form>
+
+    </div>
+</div>

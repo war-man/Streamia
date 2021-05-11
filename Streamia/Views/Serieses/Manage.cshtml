@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Series>
+@{
+    ViewData["Title"] = "Manage Movies";
+}
+
+<div class="row">
+    @foreach (var series in Model)
+    {
+        string stateClass = "warning";
+        if (series.State == StreamState.Ready)
+        {
+            stateClass = "success";
+        }
+        else if (series.State == StreamState.Error)
+        {
+            stateClass = "danger";
+        }
+        <div class="col-sm-3 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">@series.Name</h5>
+                    <p class="card-text">
+                        <div id="state-@series.Id" class="text-secondary">
+                            <i class="fa fa-circle text-@stateClass"></i> @series.State
+                        </div>
+                    </p>
+                    <hr />
+                    <a class="btn btn-secondary" asp-action="details" asp-route-id="@series.Id" title="Info"><i class="fa fa-info-circle"></i></a>
+                    <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@series.Id" title="Edit"><i class="fa fa-edit"></i></a>
+                    <form asp-action="Delete"
+                          asp-route-id="@series.Id"
+                          style="display:inline"
+                          onsubmit="return confirm('Are you sure you want to proceed?')">
+                        <button class="btn btn-secondary" title="Delete">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+        window.addEventListener('load', function () {
+            var connection = new signalR.HubConnectionBuilder().withUrl("/series-status-hub").build();
+            connection.start();
+            connection.on("UpdateSignal", function (data) {
+                var stateIndicator = $(`#state-${data.id}`);
+                if (data.state === 3) {
+                    stateIndicator.html('<i class="fa fa-circle text-success"></i> Ready');
+                } else if (data.state === 4) {
+                    stateIndicator.html('<i class="fa fa-circle text-danger"></i> Error');
+                }
+            });
+        });
+    </script>
+}

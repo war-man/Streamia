@@ -1,0 +1,38 @@
+﻿@model Case
+@{
+    ViewData["Title"] = "Add Case";
+}
+
+<div class="card">
+
+    <div class="content">
+
+        <form method="post">
+
+            <div class="form-group">
+
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+
+            </div>
+
+            <div class="form-group">
+
+                <label asp-for="Message"></label>
+                <textarea asp-for="Message" class="form-control"></textarea>
+                <span asp-validation-for="Message" class="text-danger"></span>
+
+            </div>
+
+            <hr />
+
+            <button class="btn btn-success btn-fill">
+                <i class="fas fa-check"></i> Add
+            </button>
+
+        </form>
+
+    </div>
+
+</div>

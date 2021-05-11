@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Streamia", "Streamia\Streamia.csproj", "{F22629B8-77AD-43C4-95BD-9DFD34F1E898}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F22629B8-77AD-43C4-95BD-9DFD34F1E898}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F22629B8-77AD-43C4-95BD-9DFD34F1E898}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F22629B8-77AD-43C4-95BD-9DFD34F1E898}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F22629B8-77AD-43C4-95BD-9DFD34F1E898}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {09B9E772-890B-48A5-9A4C-88209FF1EDB8}
+	EndGlobalSection
+EndGlobal

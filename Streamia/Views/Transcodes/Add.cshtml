@@ -1,0 +1,252 @@
+﻿@model Transcode
+@{
+    ViewData["Title"] = "Add Transcode";
+}
+
+<div class="card">
+    <div class="content">
+        <form method="post">
+
+            <h4 class="text-warning"><i class="fas fa-sliders-h"></i> General</h4>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="Preset"></label>
+                    <select class="form-control" asp-for="Preset" asp-items="@(new SelectList(Transcoder.Presets))"></select>
+                    <span class="text-danger" asp-validation-for="Preset"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="CRF"></label>
+                    <input asp-for="CRF" class="form-control" />
+                    <span class="text-danger" asp-validation-for="CRF"></span>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-4">
+                    <label asp-for="Threads"></label>
+                    <input asp-for="Threads" class="form-control" />
+                    <span class="text-danger" asp-validation-for="Threads"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="AnalyzeDuration"></label>
+                    <input asp-for="AnalyzeDuration" class="form-control" />
+                    <span class="text-danger" asp-validation-for="AnalyzeDuration"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="Probsize"></label>
+                    <input asp-for="Probsize" class="form-control" />
+                    <span class="text-danger" asp-validation-for="Probsize"></span>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <h4 class="text-warning"><i class="fas fa-film"></i> Video</h4>
+
+            <div class="row">
+                <label asp-for="VideoCodec" class="col-sm-4 col-form-label"></label>
+                <div class="col-sm-8">
+                    <select class="form-control" asp-for="VideoCodec" asp-items="@(new SelectList(Transcoder.VideoCodecs))"></select>
+                    <span class="text-danger" asp-validation-for="VideoCodec"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <label asp-for="VideoProfile" class="col-sm-4 col-form-label"></label>
+                <div class="col-sm-8">
+                    <select class="form-control" asp-for="VideoProfile" asp-items="@(new SelectList(Transcoder.VideoProfiles))"></select>
+                    <span class="text-danger" asp-validation-for="VideoProfile"></span>
+                </div>
+            </div>
+
+            <hr />
+
+            <h4 class="text-warning"><i class="fas fa-volume-up"></i> Audio</h4>
+
+            <div class="row">
+                <label asp-for="AudioCodec" class="col-sm-4 col-form-label"></label>
+                <div class="col-sm-8">
+                    <select class="form-control" asp-for="AudioCodec" asp-items="@(new SelectList(Transcoder.AudioCodecs))"></select>
+                    <span class="text-danger" asp-validation-for="AudioCodec"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <label asp-for="AudioChannels" class="col-sm-4 col-form-label"></label>
+                <div class="col-sm-8">
+                    <input asp-for="AudioChannels" class="form-control" />
+                    <span class="text-danger" asp-validation-for="AudioChannels"></span>
+                </div>
+            </div>
+
+            <hr />
+
+            <h4 class="text-warning"><i class="fas fa-object-group"></i> 1920x1080 Options</h4>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="MinBitrate_1080"></label>
+                    <input asp-for="MinBitrate_1080" class="form-control" />
+                    <span asp-validation-for="MinBitrate_1080" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="MaxBitrate_1080"></label>
+                    <input asp-for="MaxBitrate_1080" class="form-control" />
+                    <span asp-validation-for="MaxBitrate_1080" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="VideoBitrate_1080"></label>
+                    <input asp-for="VideoBitrate_1080" class="form-control" />
+                    <span asp-validation-for="VideoBitrate_1080" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="AudioBitrate_1080"></label>
+                    <input asp-for="AudioBitrate_1080" class="form-control" />
+                    <span asp-validation-for="AudioBitrate_1080" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="AudioSampleRate_1080"></label>
+                    <input asp-for="AudioSampleRate_1080" class="form-control" />
+                    <span asp-validation-for="AudioSampleRate_1080" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="BufferSize_1080"></label>
+                    <input asp-for="BufferSize_1080" class="form-control" />
+                    <span asp-validation-for="BufferSize_1080" class="text-danger"></span>
+                </div>
+            </div>
+
+            <hr />
+
+            <h4 class="text-warning"><i class="fa fa-object-group"></i> 1280x720 Options</h4>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="MinBitrate_720"></label>
+                    <input asp-for="MinBitrate_720" class="form-control" />
+                    <span asp-validation-for="MinBitrate_720" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="MaxBitrate_720"></label>
+                    <input asp-for="MaxBitrate_720" class="form-control" />
+                    <span asp-validation-for="MaxBitrate_720" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="VideoBitrate_720"></label>
+                    <input asp-for="VideoBitrate_720" class="form-control" />
+                    <span asp-validation-for="VideoBitrate_720" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="AudioBitrate_720"></label>
+                    <input asp-for="AudioBitrate_720" class="form-control" />
+                    <span asp-validation-for="AudioBitrate_720" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="AudioSampleRate_720"></label>
+                    <input asp-for="AudioSampleRate_720" class="form-control" />
+                    <span asp-validation-for="AudioSampleRate_720" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="BufferSize_720"></label>
+                    <input asp-for="BufferSize_720" class="form-control" />
+                    <span asp-validation-for="BufferSize_720" class="text-danger"></span>
+                </div>
+            </div>
+
+            <hr />
+
+            <h4 class="text-warning"><i class="fa fa-object-group"></i> 842x480 Options</h4>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="MinBitrate_480"></label>
+                    <input asp-for="MinBitrate_480" class="form-control" />
+                    <span asp-validation-for="MinBitrate_480" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="MaxBitrate_480"></label>
+                    <input asp-for="MaxBitrate_480" class="form-control" />
+                    <span asp-validation-for="MaxBitrate_480" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="VideoBitrate_480"></label>
+                    <input asp-for="VideoBitrate_480" class="form-control" />
+                    <span asp-validation-for="VideoBitrate_480" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="AudioBitrate_480"></label>
+                    <input asp-for="AudioBitrate_480" class="form-control" />
+                    <span asp-validation-for="AudioBitrate_480" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="AudioSampleRate_480"></label>
+                    <input asp-for="AudioSampleRate_480" class="form-control" />
+                    <span asp-validation-for="AudioSampleRate_480" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="BufferSize_480"></label>
+                    <input asp-for="BufferSize_480" class="form-control" />
+                    <span asp-validation-for="BufferSize_480" class="text-danger"></span>
+                </div>
+            </div>
+
+            <hr />
+
+            <h4 class="text-warning"><i class="fa fa-object-group"></i> 640x360 Options</h4>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <label asp-for="MinBitrate_360"></label>
+                    <input asp-for="MinBitrate_360" class="form-control" />
+                    <span asp-validation-for="MinBitrate_360" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="MaxBitrate_360"></label>
+                    <input asp-for="MaxBitrate_360" class="form-control" />
+                    <span asp-validation-for="MaxBitrate_360" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="VideoBitrate_360"></label>
+                    <input asp-for="VideoBitrate_360" class="form-control" />
+                    <span asp-validation-for="VideoBitrate_360" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="AudioBitrate_360"></label>
+                    <input asp-for="AudioBitrate_360" class="form-control" />
+                    <span asp-validation-for="AudioBitrate_360" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="AudioSampleRate_360"></label>
+                    <input asp-for="AudioSampleRate_360" class="form-control" />
+                    <span asp-validation-for="AudioSampleRate_360" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="BufferSize_360"></label>
+                    <input asp-for="BufferSize_360" class="form-control" />
+                    <span asp-validation-for="BufferSize_360" class="text-danger"></span>
+                </div>
+            </div>
+
+            <hr />
+
+            <button type="submit" class="btn btn-success btn-fill">
+                <i class="fas fa-check"></i> Add
+            </button>
+
+        </form>
+    </div>
+</div>

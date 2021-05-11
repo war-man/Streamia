@@ -1,0 +1,64 @@
+﻿@model IEnumerable<IptvUser>
+@{
+    ViewData["Title"] = "Manage IPTV Users";
+}
+
+<div class="card">
+    <div class="content">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Bouquet</th>
+                    <th>Connections</th>
+                    <th>Subscription</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach(var record in Model)
+                {
+                    <tr>
+                        <td>@record.Username</td>
+                        <td>@record.Bouquet.Name</td>
+                        <td>@record.Connections</td>
+                        <td>@record.DaysToExpire</td>
+                        <td>
+                            @if (record.Banned)
+                            {
+                                <i class="fas fa-ban text-danger"></i> <span>Banned</span>
+                            }
+                            else
+                            {
+                                <i class="fas fa-check text-success"></i> <span>Active</span>
+                            }
+                        </td>
+                        <td>
+                            <a class="btn btn-success btn-fill" asp-action="download" asp-route-id="@record.Id" title="Download"><i class="fas fa-download"></i></a>
+                            <form asp-action="Ban" asp-route-id="@record.Id" method="post" style="display:inline">
+                                @if (record.Banned)
+                                {
+                                    <button class="btn btn-success btn-fill" title="Activate"><i class="fas fa-check"></i></button>
+                                }
+                                else
+                                {
+                                    <button class="btn btn-danger btn-fill" title="Ban"><i class="fas fa-ban"></i></button>
+                                }
+                            </form>
+                            <a class="btn btn-warning btn-fill" asp-action="Edit" asp-route-id="@record.Id" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                            <form asp-action="Delete"
+                                  asp-route-id="@record.Id"
+                                  style="display:inline"
+                                  onsubmit="return confirm('Are you sure you want to proceed?')">
+                                <button class="btn btn-danger btn-fill" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

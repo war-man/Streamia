@@ -1,0 +1,11 @@
+[Unit]
+Description=Communicate with Streamia to update server state
+
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/etc/streamia/state "DOMAIN/api/serverstatus/edit/SERVER_ID/online"
+ExecStop=/etc/streamia/state "DOMAIN/api/serverstatus/edit/SERVER_ID/offline"
+
+[Install]
+WantedBy=multi-user.target

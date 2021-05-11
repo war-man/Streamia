@@ -1,0 +1,72 @@
+﻿
+@model Server
+@{
+    ViewData["Title"] = "Server Details";
+}
+
+<partial name="~/Views/Partials/_Navigation.cshtml" />
+
+<div class="row">
+
+    <div class="col-md-6">
+
+        <table class="table table-striped">
+            <tr>
+                <td><strong>@Html.DisplayNameFor(m => m.Name)</strong></td>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <td><strong>@Html.DisplayNameFor(m => m.Ip)</strong></td>
+                <td>@Model.Ip</td>
+            </tr>
+            <tr>
+                <td><strong>@Html.DisplayNameFor(m => m.RootPassword)</strong></td>
+                <td>@Model.RootPassword</td>
+            </tr>
+            <tr>
+                <td><strong>@Html.DisplayNameFor(m => m.MaxClients)</strong></td>
+                <td>@Model.MaxClients</td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div class="col-md-6">
+
+        @{ string iconClass = "close text-danger"; }
+        <table class="table table-striped">
+            <tr>
+                <td><strong>@Html.DisplayNameFor(m => m.SshPort)</strong></td>
+                <td>@Model.SshPort</td>
+            </tr>
+            <tr>
+                <td><strong>@Html.DisplayNameFor(m => m.ServerState)</strong></td>
+                <td>
+                    @{ iconClass = "warning"; }
+                    @if (Model.ServerState == ServerState.Online)
+                    {
+                        iconClass = "success";
+                    }
+                    else if (Model.ServerState == ServerState.Offline || Model.ServerState == ServerState.ConfigureFailed)
+                    {
+                        iconClass = "danger";
+                    }
+                    <i class="fa fa-circle text-@iconClass"></i> @Model.ServerState
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</div>
+
+<hr />
+
+<div class="pull-left">
+    <a href="javascript:window.history.back()" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Go back</a>
+</div>
+<div class="pull-right">
+    <a href="/servers/edit/@Model.Id" class="btn btn-warning"><i class="fa fa-pencil"></i> Edit</a>
+    <a href="/servers/delete/@Model.Id" class="btn btn-danger"><i class="fa fa-trash"></i> Delete</a>
+</div>
+<div class="clearfix"></div>

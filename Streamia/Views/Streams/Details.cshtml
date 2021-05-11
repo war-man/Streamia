@@ -1,0 +1,104 @@
+﻿
+@model Stream
+@{
+    ViewData["Title"] = "Stream Details";
+}
+
+<partial name="~/Views/Partials/_Navigation.cshtml" />
+
+<div class="row">
+
+    <div class="col-md-6">
+        <table class="table table-striped">
+            <tr>
+                <td><strong>@Html.DisplayNameFor(m => m.Name)</strong></td>
+                <td>@Model.Name</td>
+            </tr>
+            <tr>
+                <td><strong>Category</strong></td>
+                <td>@Model.Category.Name</td>
+            </tr>
+            <tr>
+                <td><strong>@Html.DisplayNameFor(m => m.State)</strong></td>
+                <td>
+                    @if (Model.State == StreamState.Live)
+                    {
+                        <i class="fa fa-circle text-success"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-circle text-danger"></i>
+                    }
+                    @Model.State
+                </td>
+            </tr>
+            <tr>
+                <td><strong>@Html.DisplayNameFor(m => m.EnablePts)</strong></td>
+                <td>
+                    @if (Model.EnablePts)
+                    {
+                        <i class="fa fa-check text-success"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-close text-danger"></i>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td><strong>@Html.DisplayNameFor(m => m.EnableRtmp)</strong></td>
+                <td>
+                    @if (Model.EnableRtmp)
+                    {
+                        <i class="fa fa-check text-success"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-close text-danger"></i>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td><strong>@Html.DisplayNameFor(m => m.Record)</strong></td>
+                <td>
+                    @if (Model.Record)
+                    {
+                        <i class="fa fa-check text-success"></i>
+                    }
+                    else
+                    {
+                        <i class="fa fa-close text-danger"></i>
+                    }
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Servers</strong></td>
+                <td>
+                    <ul>
+                        @foreach (var server in Model.StreamServers)
+                        {
+                            <li>@server.Server.Name - @server.Server.Ip</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-md-6">
+        <table class="table table-striped">
+            <tr>
+                <td><strong>Bouquets</strong></td>
+                <td>
+                    <ul>
+                        @foreach (var bouquet in Model.BouquetStreams)
+                        {
+                            <li>@bouquet.Bouquet.Name</li>
+                        }
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>

@@ -1,0 +1,58 @@
+﻿@model Server
+@{
+    ViewData["Title"] = "Edit Server";
+}
+
+<div class="card">
+    <div class="content">
+        <form method="post">
+            <div class="row">
+
+                <input type="hidden" asp-for="Id"/>
+                <input type="hidden" asp-for="ServerState" />
+
+                <div class="col-md-6">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Ip"></label>
+                    <input asp-for="Ip" class="form-control" />
+                    <span class="text-danger" asp-validation-for="Ip"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="RootPassword"></label>
+                    <input asp-for="RootPassword" class="form-control" />
+                    <span class="text-danger" asp-validation-for="RootPassword"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="MaxClients"></label>
+                    <input asp-for="MaxClients" class="form-control" />
+                    <span class="text-danger" asp-validation-for="MaxClients"></span>
+                </div>
+
+            </div>
+            <div class="row">
+
+                <div class="form-group col-md-12">
+                    <label asp-for="SshPort"></label>
+                    <input asp-for="SshPort" class="form-control" />
+                    <span class="text-danger" asp-validation-for="SshPort"></span>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <button class="btn btn-warning btn-fill">
+                <i class="fas fa-pencil-alt"></i> Edit
+            </button>
+
+        </form>
+
+    </div>
+</div>

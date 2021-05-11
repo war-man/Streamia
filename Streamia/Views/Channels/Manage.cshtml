@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Channel>
+@{
+    ViewData["Title"] = "Manage Channels";
+}
+
+<div class="card">
+    <div class="content">
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var record in Model)
+                {
+                    string stateClass = "warning";
+                    if (record.State == StreamState.Live)
+                    {
+                        stateClass = "success";
+                    }
+                    else if (record.State == StreamState.Error)
+                    {
+                        stateClass = "danger";
+                    }
+                    <tr>
+                        <td>@record.Name</td>
+                        <td>@record.Category.Name</td>
+                        <td id="state-@record.Id">
+                            <i class="fa fa-circle text-@stateClass"></i> @record.State
+                        </td>
+                        <td>
+                            <a class="btn btn-secondary btn-fill" asp-action="details" asp-route-id="@record.Id" title="Info"><i class="fas fa-info-circle"></i></a>
+                            <a class="btn btn-warning btn-fill" asp-action="Edit" asp-route-id="@record.Id" title="Edit"><i class="fa fa-edit"></i></a>
+                            <form asp-action="Delete"
+                                  asp-route-id="@record.Id"
+                                  style="display:inline"
+                                  onsubmit="return confirm('Are you sure you want to proceed?')">
+                                <button class="btn btn-danger btn-fill" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+        window.addEventListener('load', function () {
+            var connection = new signalR.HubConnectionBuilder().withUrl("/channel-status-hub").build();
+            connection.start();
+            connection.on("UpdateSignal", function (data) {
+                var stateIndicator = $(`#state-${data.id}`);
+                if (data.state === 1) {
+                    stateIndicator.html('<i class="fas fa-circle text-success"></i> Live');
+                } else if (data.state === 4) {
+                    stateIndicator.html('<i class="fas fa-circle text-danger"></i> Error');
+                }
+            });
+        });
+    </script>
+}

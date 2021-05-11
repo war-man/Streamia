@@ -1,0 +1,19 @@
+﻿<div id="search-module">
+    <form method="get" onsubmit="processForm(this, event)">
+        <input type="search" name="keyword" placeholder="Search..." class="form-control" value="@ViewBag.Keyword" autocomplete="off"/>
+        <button class="main-btn" id="search-button">
+            <i class="fa fa-search"></i>
+        </button>
+    </form>
+</div>
+<script>
+    function processForm(form, event) {
+        if (!form.keyword.value) {
+            event.preventDefault();
+            return;
+        }
+        var searchButton = document.getElementById("search-button");
+        searchButton.innerHTML = '<i class="fa fa-fw fa-spinner fa-pulse"></i>';
+        searchButton.setAttribute("disabled", "disabled");
+    }
+</script>

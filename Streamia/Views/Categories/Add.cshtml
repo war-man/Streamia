@@ -1,0 +1,36 @@
+﻿@model Category
+@{
+    ViewData["Title"] = "Add Category";
+}
+
+<div class="card">
+    <div class="content">
+        <form method="post">
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <label asp-for="CategoryType"></label>
+                    <select asp-for="CategoryType" class="form-control" asp-items="Html.GetEnumSelectList<CategoryType>()"></select>
+                    <span class="text-danger" asp-validation-for="CategoryType"></span>
+                </div>
+
+                <div class="col-md-6">
+
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span class="text-danger" asp-validation-for="Name"></span>
+
+                </div>
+
+            </div>
+
+            <hr />
+
+            <button type="submit" class="btn btn-success btn-fill">
+                <i class="fas fa-check"></i> Add
+            </button>
+
+        </form>
+    </div>
+</div>

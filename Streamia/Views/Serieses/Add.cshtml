@@ -1,0 +1,261 @@
+﻿@model Series
+@{
+    ViewData["Title"] = "Add Series";
+}
+
+<div class="card">
+    <div class="content">
+        <form method="post" id="series-form">
+
+            <input type="hidden" asp-for="ServerId"/>
+
+            <div class="row">
+
+                <div class="col-md-6">
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label asp-for="CategoryId"></label>
+                            <select asp-for="CategoryId" asp-items="@(new SelectList(ViewBag.Categories,"Id","Name"))" class="form-control">
+                            </select>
+                            <span class="text-danger" asp-validation-for="CategoryId"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="BouquetIds"></label>
+                            <select asp-for="BouquetIds" asp-items="@(new SelectList(ViewBag.Bouquets,"Id","Name"))" class="form-control" multiple></select>
+                            <span class="text-danger" asp-validation-for="BouquetIds"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label asp-for="Name"></label>
+                            <div id="searchia">
+                                <input asp-for="Name" class="form-control" autocomplete="off" />
+                            </div>
+                            <span class="text-danger" asp-validation-for="Name"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="PosterUrl"></label>
+                            <input asp-for="PosterUrl" class="form-control" />
+                            <span class="text-danger" asp-validation-for="PosterUrl"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label asp-for="Cast"></label>
+                            <input asp-for="Cast" class="form-control" />
+                            <span class="text-danger" asp-validation-for="Cast"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Gener"></label>
+                            <input asp-for="Gener" class="form-control" />
+                            <span class="text-danger" asp-validation-for="Gener"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label asp-for="ReleaseDate"></label>
+                            <input asp-for="ReleaseDate" class="form-control" />
+                            <span class="text-danger" asp-validation-for="ReleaseDate"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Rating"></label>
+                            <input asp-for="Rating" class="form-control" />
+                            <span class="text-danger" asp-validation-for="Rating"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <label asp-for="Overview"></label>
+                            <textarea asp-for="Overview" class="form-control"></textarea>
+                            <span class="text-danger" asp-validation-for="Overview"></span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+                    <div id="seasons-area">
+                        <div class="text-center" style="padding-top:25vh">
+                            <i class="fas fa-file-video fa-3x text-secondary"></i>
+                        </div>
+                        <h3 class="text-secondary text-center" >Episodes data will show here</h3>
+                    </div>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <button class="btn btn-success btn-fill">
+                <i class="fas fa-check"></i> Add
+            </button>
+
+        </form>
+
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/Searchia.js" asp-append-version="true"></script>
+    <script src="~/js/Exploreia.js" asp-append-version="true"></script>
+    <script src="~/js/TMDB.js" asp-append-version="true"></script>
+    <script>
+        let currentSelectedSeason = null;
+        let currentSelectedSeasonEpisodeCount = null;
+
+        const tmdb = new TMDB('415e9238d5188172426c3858b367e468');
+
+        const searchia = new Searchia();
+
+        searchia.onTyping(value => {
+            tmdb.search(value, 'tv', response => {
+                response.results.forEach(result => {
+                    searchia.onResult(result.id, `${result.name} (${result.first_air_date ? result.first_air_date.split('-')[0] : ''})`);
+                });
+            });
+        });
+
+        searchia.onResultClick(id => {
+            tmdb.find(`tv/${id}`, 'season,credits', response => {
+                let genres = [];
+                let cast = [];
+                let globalEpisodeIndexer = 0;
+                response.genres.forEach(genre => {
+                    genres.push(genre.name);
+                });
+                response.credits.cast.forEach(credit => {
+                    cast.push(credit.name);
+                });
+                $('#seasons-area').html('');
+                response.seasons.forEach(season => {
+                    let seasonNumber = season.season_number;
+                    let episodeCount = season.episode_count;
+                    if (seasonNumber > 0) {
+                        let template = `
+                            <div class="card" id="season-${seasonNumber}">
+                                <div class="header">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <input type="text" value="Season ${seasonNumber} - ${episodeCount} Episodes" class="form-control" disabled/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button type="button" class="btn btn-primary btn-block" onclick="browse(${seasonNumber},${episodeCount})">
+                                                <i class="fa fa-folder-open"></i> Browse
+                                            </button>
+                                        </div>
+                                    </div>
+                        `;
+                        for (let i = 0; i < episodeCount; i++) {
+                            let episodeNumber = i + 1;
+                            template += `
+                                <div id="${seasonNumber}_${episodeNumber}">
+                                    <input name="Episodes[${globalEpisodeIndexer}].Season" value="${seasonNumber}" type="hidden" />
+                                    <input name="Episodes[${globalEpisodeIndexer}].Number" value="${episodeNumber}" type="hidden" />
+                                    <input class="source" name="Episodes[${globalEpisodeIndexer}].Source" type="hidden" />
+                                    <input class="name" name="Episodes[${globalEpisodeIndexer}].Name" type="hidden" />
+                                    <input class="overview" name="Episodes[${globalEpisodeIndexer}].Overview" type="hidden" />
+                                    <input class="director" name="Episodes[${globalEpisodeIndexer}].Director" type="hidden" />
+                                    <input class="release-date" name="Episodes[${globalEpisodeIndexer}].ReleaseDate" type="hidden" />
+                                    <input class="rating" name="Episodes[${globalEpisodeIndexer}].Rating" type="hidden" />
+                                </div>
+                            `;
+                            globalEpisodeIndexer++;
+                        }
+                        template += '</div></div>';
+                        $('#seasons-area').append(template);
+                        tmdb.find(`tv/${id}/season/${seasonNumber}`, '', data => {
+                            data.episodes.forEach(episode => {
+                                let episodeNumber = episode.episode_number;
+                                $(`#${seasonNumber}_${episodeNumber} .name`).val(episode.name);
+                                $(`#${seasonNumber}_${episodeNumber} .overview`).val(episode.overview);
+                                $(`#${seasonNumber}_${episodeNumber} .rating`).val(episode.vote_average);
+                                $(`#${seasonNumber}_${episodeNumber} .release-date`).val(episode.air_date);
+                                for (let person of episode.crew) {
+                                    if (person.department === "Directing") {
+                                        $(`#${seasonNumber}_${episodeNumber} .director`).val(person.name);
+                                        break;
+                                    }
+                                }
+                            });
+                        });
+                    }
+                });
+                $('#Name').val(response.name);
+                $('#PosterUrl').val(tmdb.generatePosterUrl(response.poster_path));
+                $('#Overview').val(response.overview);
+                $('#Rating').val(response.vote_average);
+                $('#Gener').val(genres.join(','));
+                $('#Cast').val(cast.join(','));
+                $('#ReleaseDate').val(response.first_air_date);
+            });
+        });
+
+        const exploreia = new Exploreia({
+            pickDirectory: true
+        });
+
+        exploreia.render(@Html.Raw(Json.Serialize(ViewBag.Servers)));
+
+        const connection = new signalR.HubConnectionBuilder().withUrl("/directory-browser-hub").build();
+        connection.start();
+
+        connection.on('DirectoryList', function (data) {
+            exploreia.renderDirectories(data.directoryList);
+        });
+
+        exploreia.onChange(function (server, path) {
+            connection.invoke('ListServerDirectory', server, path).catch(() => {
+                exploreia.onError();
+            });
+        });
+
+        exploreia.onPickButtonClick(function (files) {
+            let season = $(`#season-${currentSelectedSeason}`);
+            files.forEach((file, i) => {
+                let episodeNumber = i + 1;
+                $('#ServerId').val(exploreia.currentServer);
+                $(`#${currentSelectedSeason}_${episodeNumber} .source`).val(file);
+            });
+            exploreia.close();
+            if (files.length < currentSelectedSeasonEpisodeCount) {
+                season.append(`<div class="content"><div class="alert alert-warning"><i class="fas fa-exclamation-triangle"></i> ${files.length} episodes selected don't match season epiosdes count, they will be added anyways</div></div>`);
+            } else {
+                season.append(`<div class="content"><div class="alert alert-success"><i class="fas fa-check"></i> ${files.length} episodes selected</div></div>`);
+            }
+        });
+
+        exploreia.onDispose(server => {
+            connection.invoke('DisposeConnection', server).catch(() => {
+                exploreia.onError();
+            });
+        });
+
+        function browse(seasonNumber, episodesCount) {
+            currentSelectedSeason = seasonNumber;
+            currentSelectedSeasonEpisodeCount = episodesCount;
+            exploreia.open();
+        }
+    </script>
+}

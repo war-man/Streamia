@@ -1,0 +1,72 @@
+﻿@model Bouquet
+@{
+    ViewData["Title"] = "Edit Bouquet";
+}
+
+<div class="card">
+    <div class="content">
+        <form method="post">
+
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row">
+
+                <div class="col-md-6">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Points"></label>
+                    <input asp-for="Points" class="form-control" />
+                    <span class="text-danger" asp-validation-for="Points"></span>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <h6 class="font-weight-bold text-primary"><i class="fa fa-plus"></i> Add to this bouquet</h6>
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <label asp-for="StreamIds"></label>
+                    <select class="form-control" multiple asp-for="StreamIds" asp-items="@(new SelectList(ViewBag.Streams, "Id", "Name"))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="StreamIds"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="MovieIds"></label>
+                    <select class="form-control" multiple asp-for="MovieIds" asp-items="@(new SelectList(ViewBag.Movies, "Id", "Name"))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="MovieIds"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="SeriesIds"></label>
+                    <select class="form-control" multiple asp-for="SeriesIds" asp-items="@(new SelectList(ViewBag.Serieses, "Id", "Name"))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="SeriesIds"></span>
+                </div>
+
+                <div class="col-md-3">
+                    <label asp-for="ChannelIds"></label>
+                    <select class="form-control" multiple asp-for="ChannelIds" asp-items="@(new SelectList(ViewBag.Channels, "Id", "Name"))">
+                    </select>
+                    <span class="text-danger" asp-validation-for="ChannelIds"></span>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <button type="submit" class="btn btn-warning btn-fill">
+                <i class="fas fa-pencil-alt"></i> Edit
+            </button>
+
+        </form>
+    </div>
+</div>

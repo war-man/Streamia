@@ -1,0 +1,31 @@
+apt-get update ; \
+apt-get install curl git ffmpeg build-essential libpcre3 libpcre3-dev libssl-dev zlib1g-dev -y ; \
+unlink /etc/systemd/system/nginx.service ; \
+unlink /etc/systemd/system/streamia.service ; \
+rm -f -R /usr/local/nginx ; \ 
+rm -f /usr/local/sbin/nginx ; \
+rm -f -R /etc/streamia ; \
+rm -rf ~/build ; \
+systemctl daemon-reload ; \
+mkdir ~/build ; \
+cd ~/build ; \
+git clone git://github.com/arut/nginx-rtmp-module.git ; \
+git clone git://github.com/perusio/nginx-auth-request-module.git ; \
+wget http://nginx.org/download/nginx-1.14.2.tar.gz ; \
+tar xzf nginx-1.14.2.tar.gz ; \
+cd nginx-1.14.2 ; \
+./configure --with-http_ssl_module --add-module=../nginx-rtmp-module --add-module=../nginx-auth-request-module; \
+make ; \
+make install ; \
+unlink /usr/local/nginx/conf/nginx.conf ; \
+printf "NGINX_CONFIG" >> /usr/local/nginx/conf/nginx.conf ; \
+printf "NGINX_SERVICE" >> /etc/systemd/system/nginx.service ; \
+systemctl start nginx ; \
+systemctl enable nginx ; \
+mkdir /etc/streamia ; \
+printf "#! /bin/bash\ncurl -i -X GET \$1" >> /etc/streamia/state ; \
+chmod +x /etc/streamia/state ; \
+printf "STREAMIA_SERVICE" >> /etc/systemd/system/streamia.service ; \
+systemctl enable streamia ; \
+rm -rf ~/build ; \
+curl -i -X GET DOMAIN/api/serverstatus/edit/SERVER_ID/online

@@ -1,0 +1,308 @@
+﻿@inject SignInManager<AppUser> signInManager;
+@inject UserManager<AppUser> userManager;
+@{ 
+    bool userIsAdmin = ((ClaimsIdentity)User.Identity).HasClaim("IsAdmin", "true");
+    bool userIsReseller = ((ClaimsIdentity)User.Identity).HasClaim("IsReseller", "true");
+    bool userIsSubReseller = ((ClaimsIdentity)User.Identity).HasClaim("IsSubReseller", "true");
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="~/favicon.ico">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>Streamia</title>
+
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="~/lib/bootstrap-3/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/animate.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300' rel='stylesheet' type='text/css'>
+    <link href="~/lib/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/css/select2-bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplebar@5.2.1/dist/simplebar.css" />
+    <link href="~/css/dashboard.css" rel="stylesheet" asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+
+    <div class="wrapper">
+
+        <div class="sidebar" data-color="blue">
+            <div class="sidebar-wrapper" data-simplebar>
+                <div class="logo">
+                    <a href="http://www.creative-tim.com">
+                        <img src="~/images/streamia.png" alt="Streamia" style="width: 120px" />
+                    </a>
+                </div>
+
+                <ul class="nav" id="side-nav">
+                    <li>
+                        <a asp-controller="home" asp-action="dashboard">
+                            <i class="fas fa-home"></i>
+                            <p>Home</p>
+                        </a>
+                    </li>
+
+                    @if (userIsAdmin)
+                    {
+                        <li>
+                            <a asp-controller="servers" asp-action="manage">
+                                <i class="fas fa-server"></i>
+                                <p>Servers</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="streams" asp-action="manage">
+                                <i class="fas fa-wave-square"></i>
+                                <p>Streams</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="movies" asp-action="manage">
+                                <i class="fas fa-film"></i>
+                                <p>Movies</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="serieses" asp-action="manage">
+                                <i class="fas fa-file-video"></i>
+                                <p>Serieses</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="channels" asp-action="manage">
+                                <i class="fas fa-tv"></i>
+                                <p>Channels</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="transcodes" asp-action="manage">
+                                <i class="fas fa-code"></i>
+                                <p>Transcodes</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="categories" asp-action="manage">
+                                <i class="fas fa-tags"></i>
+                                <p>Categories</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="bouquets" asp-action="manage">
+                                <i class="fas fa-cubes"></i>
+                                <p>Bouquets</p>
+                            </a>
+                        </li>
+                    }
+
+                    @if (userIsReseller || userIsAdmin)
+                    {
+                        <li>
+                            <a asp-controller="iptvusers" asp-action="manage">
+                                <i class="fas fa-users"></i>
+                                <p>IPTV Users</p>
+                            </a>
+                        </li>
+                    }
+
+                    @if (userIsReseller)
+                    {
+                        <li>
+                            <a asp-controller="resellers" asp-action="recharge">
+                                <i class="fas fa-dollar-sign"></i>
+                                <p>Recharge</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="cases" asp-action="add">
+                                <i class="fas fa-ticket-alt"></i>
+                                <p>Cases</p>
+                            </a>
+                        </li>
+                    }
+
+                    @if (userIsAdmin)
+                    {
+                        <li>
+                            <a asp-controller="resellers" asp-action="manage">
+                                <i class="fas fa-users-cog"></i>
+                                <p>Resellers</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="settings" asp-action="general">
+                                <i class="fas fa-cog"></i>
+                                <p>Settings</p>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="cases" asp-action="manage">
+                                <i class="fas fa-ticket-alt"></i>
+                                <p>Cases</p>
+                            </a>
+                        </li>
+                    }
+
+
+                </ul>
+            </div>
+            <div class="sidebar-background" style="background-image: url('/images/background.jpg')"></div>
+        </div>
+
+        <div class="main-panel">
+            <nav class="navbar navbar-default navbar-fixed">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <span class="navbar-brand">@ViewData["Title"]</span>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav navbar-left">
+                            <li>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-dashboard"></i>
+                                    <p class="hidden-lg hidden-md">@ViewData["Title"]</p>
+                                </a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-globe"></i>
+                                    <b class="caret hidden-lg hidden-md"></b>
+                                    <p class="hidden-lg hidden-md">
+                                        5 Notifications
+                                        <b class="caret"></b>
+                                    </p>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Notification 1</a></li>
+                                    <li><a href="#">Notification 2</a></li>
+                                    <li><a href="#">Notification 3</a></li>
+                                    <li><a href="#">Notification 4</a></li>
+                                    <li><a href="#">Another notification</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="">
+                                    <i class="fa fa-search"></i>
+                                    <p class="hidden-lg hidden-md">Search</p>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right">
+                            @if (userIsReseller)
+                            {
+                                var user = await userManager.GetUserAsync(User);
+                                <li>
+                                    <a onclick="event.preventDefault()">Credit: @user.Credit</a>
+                                </li>
+                            }
+                            <li>
+                                <a onclick="event.preventDefault()">@User.Identity.Name</a>
+                            </li>
+                            <li>
+                                <a onclick="event.preventDefault(); $('#logout').submit()" class="text-danger" style="cursor:pointer">Logout</a>
+                                <form method="post" asp-controller="account" asp-action="logout" style="display:inline" id="logout"></form>
+                            </li>
+                            <li class="separator hidden-lg"></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <nav class="pull-left">
+                        <ul>
+                            @if (!ViewData.ContainsKey("DisableNavigation"))
+                            {
+                                <li>
+                                    <a asp-action="Add" class="btn btn-success btn-fill">
+                                        <i class="fas fa-plus"></i> Add
+                                    </a>
+                                </li>
+                                <li>
+                                    <a asp-action="Manage" class="btn btn-warning btn-fill">
+                                        <i class="fas fa-list-ol"></i> Manage
+                                    </a>
+                                </li>
+                            }
+                            @if (!ViewData.ContainsKey("DisablePagination") && ViewBag.PaginationData != null)
+                            {
+                                <li>
+                                    @if (ViewBag.PaginationData["HasPrevious"])
+                                    {
+                                        <a href="?page=@(ViewBag.PaginationData["CurrentPage"] - 1)" class="btn btn-secondary">
+                                            <i class="fas fa-chevron-circle-left"></i>
+                                        </a>
+                                    }
+                                    @if (ViewBag.PaginationData["HasNext"])
+                                    {
+                                        <a href="?page=@(ViewBag.PaginationData["CurrentPage"] + 1)" class="btn btn-secondary">
+                                            <i class="fas fa-chevron-circle-right"></i>
+                                        </a>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </nav>
+                    <p class="copyright pull-right">
+                        &copy;
+                        <script>document.write(new Date().getFullYear())</script> <a href="https://streamia.io">Streamia</a> ALL RIGHTS RESERVED
+                    </p>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/bootstrap-3/bootstrap.min.js"></script>
+    <script src="~/lib/select2/js/select2.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/simplebar@5.2.1/dist/simplebar.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
+
+    <script>
+        $('#side-nav li a').each(function () {
+            let urlPart = window.location.pathname.toLowerCase().split('/')[1];
+            let currentHref = $(this).attr('href').toLowerCase();
+            if (
+                window.location.pathname.toLowerCase() === currentHref ||
+                (currentHref.includes(urlPart) && urlPart != '')
+            ) {
+                $(this).parent().addClass('active');
+            }
+        });
+        $('.navigation-link').each(function () {
+            let currentHref = $(this).attr('href').toLowerCase();
+            if (window.location.pathname.toLowerCase() === currentHref) {
+                $(this).addClass('active');
+            }
+        });
+        window.addEventListener('load', function () {
+            $('select:not(.no-select)').select2({
+                theme: 'bootstrap'
+            });
+        });
+    </script>
+</body>
+</html>

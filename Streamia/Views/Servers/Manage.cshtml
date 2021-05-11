@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Server>
+@{
+    ViewData["Title"] = "Manage Servers";
+}
+
+<div class="card">
+    <div class="content">
+
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Ip</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var record in Model)
+                {
+                    string stateClass = "warning";
+                    if (record.ServerState == ServerState.Online)
+                    {
+                        stateClass = "success";
+                    }
+                    else if (record.ServerState == ServerState.Offline || record.ServerState == ServerState.ConfigureFailed)
+                    {
+                        stateClass = "danger";
+                    }
+                    <tr>
+                        <td>@record.Name</td>
+                        <td>@record.Ip</td>
+                        <td id="state-@record.Id">
+                            <i class="fa fa-circle text-@stateClass"></i> @record.ServerState
+                        </td>
+                        <td>
+                            <a class="btn btn-info btn-fill" asp-action="Details" asp-route-id="@record.Id" title="Details"><i class="fas fa-info-circle"></i></a>
+                            <a class="btn btn-warning btn-fill" asp-action="Edit" asp-route-id="@record.Id" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                            <form asp-action="Delete"
+                                  asp-route-id="@record.Id"
+                                  style="display:inline"
+                                  onsubmit="return confirm('Are you sure you want to proceed?')">
+                                <button class="btn btn-danger btn-fill" title="Delete">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+@section Scripts{
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script>
+        var connection = new signalR.HubConnectionBuilder().withUrl("/server-status-hub").build();
+        connection.on("UpdateSignal", function (data) {
+            var className = 'warning';
+            var statusName = 'Configuring';
+            if (data.state === 1) {
+                className = 'success';
+                statusName = 'Online';
+            } else if (data.state === 2) {
+                className = 'danger';
+                statusName = 'Offline';
+            } else if (data.state === 3) {
+                className = 'danger';
+                statusName = 'Fail';
+            }
+            $(`#state-${data.id}`).html(`<i class="fa fa-circle text-${className}"></i> ${statusName}`);
+        });
+        connection.start();
+    </script>
+}
